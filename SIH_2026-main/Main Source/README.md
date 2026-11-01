@@ -5,6 +5,12 @@ An AI-assisted Antarctic maritime navigation prototype combining the **BYU/NIC A
 
 ---
 
+## 🎥 Project Demo
+
+Watch the NavIce-Antarctica demonstration video: [View demo on YouTube](https://youtu.be/MBoCqb07ufw).
+
+---
+
 ## 🚀 Quick Start
 
 ### 1. Create a virtual environment and install dependencies
