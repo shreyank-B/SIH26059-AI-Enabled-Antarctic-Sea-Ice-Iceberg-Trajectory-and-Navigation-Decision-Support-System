@@ -6,6 +6,10 @@ NavIce-Antarctica is a Smart India Hackathon 2026 prototype for exploring safer 
 
 > **Prototype notice:** This is an academic research and demonstration prototype, not a certified navigation system. It must not be used to provide operational advice to a real vessel. The voyage simulation is not live ship GPS/AIS tracking. Online data requests may use cached or demonstration data when live services are unavailable.
 
+## Demo video
+
+Watch the NavIce-Antarctica project demonstration: [YouTube demo video](https://youtu.be/MBoCqb07ufw).
+
 ## Project at a glance
 
 - **Problem statement:** SIH 2026 — Problem Statement 26059
