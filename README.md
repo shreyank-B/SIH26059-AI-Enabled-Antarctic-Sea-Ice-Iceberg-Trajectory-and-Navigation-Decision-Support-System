@@ -1,83 +1,144 @@
 # NavIce-Antarctica
+
 ### AI-enabled Antarctic sea-ice, iceberg trajectory and maritime navigation decision support
 
-NavIce-Antarctica is a Smart India Hackathon 2026 prototype (Problem Statement **SIH26059**) exploring safer route planning in Antarctic waters. It combines historical iceberg observations, short-horizon trajectory forecasting, collision-risk assessment, risk-aware route search and an interactive voyage simulation.
+NavIce-Antarctica is a Smart India Hackathon 2026 prototype for exploring safer route planning in Antarctic waters. It brings together historical iceberg observations, short-horizon trajectory forecasting, collision-risk assessment, risk-aware route search and an interactive voyage simulation.
 
-> **Prototype notice:** This is a research and demonstration decision-support prototype, not a certified navigation system. It does not provide validated operational advice to a real vessel. Simulation playback is not live ship GPS/AIS tracking. Online data requests may fall back to local cached or demonstration data.
+> **Prototype notice:** This is an academic research and demonstration prototype, not a certified navigation system. It must not be used to provide operational advice to a real vessel. The voyage simulation is not live ship GPS/AIS tracking. Online data requests may use cached or demonstration data when live services are unavailable.
 
-## Capabilities
-- Historical iceberg tracking and processing using BYU/NIC track data.
-- PyTorch GRU trajectory forecasting benchmarked against a constant-velocity baseline.
-- CPA/TCPA-style collision-risk calculations and configurable safety envelopes.
-- Risk-aware A* route planning with geographic obstacle avoidance.
-- Interactive 3D voyage scenario with animated vessel and iceberg hazards.
-- Configurable vessel engineering estimates for illustrative resistance, power, fuel and emissions.
+## Project at a glance
 
-## Offline model benchmark
-The checked-in models/eval_metrics.json reports mean Haversine errors on the BYU/NIC test-track evaluation:
+- **Problem statement:** SIH 2026 — Problem Statement 26059
+- **Project:** NavIce-Antarctica
+- **Core components:** Python, PyTorch GRU, FastAPI, Next.js, geospatial visualisation and 3D simulation
+- **Primary research focus:** Historical iceberg trajectory forecasting and risk-aware Antarctic route-planning concepts
 
-| Horizon | Constant velocity | GRU | Improvement |
+## Key prototype capabilities
+
+- Historical iceberg track processing and visualisation using BYU/NIC data.
+- PyTorch GRU trajectory forecasting compared with a constant-velocity baseline.
+- CPA/TCPA-style proximity and collision-risk calculations with configurable safety envelopes.
+- Risk-aware A* route planning over configured navigation grids and geographic obstacles.
+- Interactive dashboard and animated 3D voyage scenario.
+- Illustrative vessel engineering estimates based on configured inputs.
+
+Capabilities depend on the data and services available in the current run. See [Prototype limitations](docs/LIMITATIONS.md) before interpreting any output.
+
+## Offline iceberg-model benchmark
+
+The root project model card records the following mean Haversine errors on the BYU/NIC test-track evaluation (46,576 evaluation sequences):
+
+| Forecast horizon | Constant-velocity baseline | GRU | Reported reduction |
 |---|---:|---:|---:|
 | 24 hours | 2.86 km | **2.31 km** | 19.23% |
 | 48 hours | 5.16 km | **3.86 km** | 25.19% |
 
-These are offline evaluation results, not a guarantee of future real-world accuracy. See docs/MODEL_CARD.md.
+These are offline evaluation results, not a guarantee of future or operational accuracy. Refer to [docs/MODEL_CARD.md](docs/MODEL_CARD.md) for context and limitations. The older project-level README under `SIH_2026-main/Main Source` may contain earlier benchmark figures; use the root model card and its referenced evaluation artefacts as the current summary, and verify the underlying evaluation before making external claims.
 
-## Repository layout
-- app/backend — FastAPI service
-- app/frontend — browser dashboard and 3D simulation assets
-- frontend — Next.js interface source
-- src — preprocessing, forecasting, risk and routing modules
-- scripts — data synchronisation and stress-test utilities
-- data — dataset manifest, cached data and processed outputs
-- models — GRU checkpoint, scaler and evaluation artefacts
-- artifacts — visualisation and demo artefacts
-- docs — architecture, model card and limitations
+## Repository structure
 
-## Quick start: Python API
-Python 3.10+ is recommended.
+The repository keeps the original project folder name. The main implementation is under `SIH_2026-main/Main Source/`.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\Activate.ps1
-pip install -r requirements.txt
-uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
+```text
+.
+├── README.md
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── LIMITATIONS.md
+│   └── MODEL_CARD.md
+└── SIH_2026-main/
+    └── Main Source/
+        ├── app/                 # FastAPI backend and browser dashboard assets
+        ├── frontend/            # Next.js frontend source
+        ├── src/                 # Data processing, forecasting, risk and routing
+        ├── data/                # Dataset manifest, cached and processed data
+        ├── models/              # Model checkpoint, scaler and evaluation artefacts
+        ├── artifacts/           # Plots and demonstration artefacts
+        ├── scripts/             # Utility and workflow scripts
+        ├── stats_database_v7.1/
+        ├── stats_database_v7.1 2/
+        ├── verification_results/
+        ├── requirements.txt
+        └── DATA_SOURCES.md
 ```
-Open http://127.0.0.1:8000. API documentation may be available at /docs.
 
-## Frontend
-The Next.js source is in frontend/.
+## Getting started
+
+The commands below assume you have cloned this repository and are running them from its root directory.
+
+### 1. Open the implementation folder
 
 ```bash
-cd frontend
-npm ci
+cd "SIH_2026-main/Main Source"
+```
+
+### 2. Set up and run the Python API
+
+Python 3.10 or newer is recommended.
+
+**Windows PowerShell**
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
+```
+
+**macOS / Linux**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
+```
+
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000). If the API documentation is enabled by the running application, it may be available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
+
+### 3. Run the Next.js frontend (separate terminal)
+
+From the repository root:
+
+```bash
+cd "SIH_2026-main/Main Source/frontend"
+npm install
 npm run dev
 ```
-Configure the frontend API base URL for the backend used in your environment. See frontend/package.json for scripts.
 
-## Reproducing model workflows
-Preprocessing, feature generation, training and evaluation modules are in src/. Inspect command-line options and DATA_SOURCES.md before running, as raw dataset paths can differ by environment.
+Open the local URL printed by Next.js (normally [http://localhost:3000](http://localhost:3000)). Configure the frontend's API base URL for the backend instance you are running; check the frontend source and configuration for the expected setting. The frontend and API are separate processes.
+
+### 4. Explore model and routing workflows
+
+From `SIH_2026-main/Main Source/`, with the Python environment activated:
 
 ```bash
-PYTHONPATH=. python src/preprocessing.py --help
-PYTHONPATH=. python src/train_gru.py --help
-PYTHONPATH=. python src/evaluate.py --help
-PYTHONPATH=. python src/route_optimizer.py --test
+python src/preprocessing.py --help
+python src/train_gru.py --help
+python src/evaluate.py --help
+python src/route_optimizer.py --test
 ```
 
-## Data provenance and status
-The manifest references BYU/NIC iceberg tracking, NOAA/NSIDC sea-ice products, Copernicus Sentinel-1, Copernicus Marine/ERA5 and NCPOR resources. A manifest entry identifies a source or intended integration; it does **not** prove that a live feed is currently connected or ingested into every feature.
+Check the script help and [DATA_SOURCES.md](SIH_2026-main/Main%20Source/DATA_SOURCES.md) before running data workflows. Some workflows may require additional data downloads, substantial compute or environment-specific paths. Training is not required just to start the API.
 
-- Historical BYU/NIC tracks are used for the iceberg trajectory research workflow.
-- Some dashboard services attempt online synchronisation and may use local cache or fallback data.
-- The sea-ice visual layer currently includes climatology/advection-style or demonstration logic; do not interpret it as a validated operational forecast from a trained ConvLSTM on live Sentinel-1 rasters.
-- Environmental forcing and vessel engineering outputs are estimates and depend on configured inputs and available data.
-- The 3D voyage is a scenario simulation, not a live AIS feed.
+## Data provenance and integration status
 
-See DATA_SOURCES.md and docs/LIMITATIONS.md.
+The project documents references to BYU/NIC iceberg tracks, NOAA/NSIDC sea-ice products, Copernicus Sentinel-1, Copernicus Marine/ERA5 and NCPOR resources. A provider listed in a manifest or data-source document is a provenance reference or intended integration; it does **not** prove that its live feed is connected or currently ingested by every feature.
+
+- Historical BYU/NIC tracks are used in the iceberg trajectory research workflow.
+- Some dashboard services attempt online synchronisation and may fall back to local cache or demonstration data.
+- The sea-ice visual layer includes climatology/advection-style or demonstration logic. Do not interpret it as a validated operational forecast from a trained ConvLSTM running on live Sentinel-1 rasters.
+- Environmental forcing and vessel-engineering outputs are estimates and depend on configured inputs and available data.
+- The animated voyage is a scenario simulation, not a live AIS/GPS feed.
+
+See [DATA_SOURCES.md](SIH_2026-main/Main%20Source/DATA_SOURCES.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 ## Safety and intended use
-For academic research, prototyping and demonstration only. Not certified for maritime navigation, icebreaker operations, search and rescue or safety-critical decisions. Operational use would require validated data feeds, independent model verification, uncertainty quantification, domain-expert review, regulatory approval and certified bridge-system integration.
 
-## License
-MIT License. Third-party datasets, map layers, models, fonts, images and 3D assets may have separate licences or attribution requirements; consult original providers before redistribution or commercial use.
+For academic research, prototyping and demonstration only. Not certified for maritime navigation, icebreaker operations, search and rescue or other safety-critical decisions. Operational use would require licensed and validated data feeds, independent model verification, uncertainty quantification, domain-expert review, regulatory approval and certified bridge-system integration.
+
+## Licence and third-party assets
+
+The repository includes an MIT licence. Third-party datasets, map layers, models, fonts, images and 3D assets may have separate licences or attribution requirements. Check the original provider terms before redistribution or commercial use.
