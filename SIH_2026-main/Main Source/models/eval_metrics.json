@@ -1,0 +1,50 @@
+{
+  "evaluation_dataset": "BYU/NIC Test Tracks",
+  "num_test_sequences": 46576,
+  "metrics": {
+    "baseline_constant_velocity": {
+      "24h": {
+        "lat_mae_deg": 0.016,
+        "lon_mae_deg": 0.0467,
+        "rmse_deg": 0.3861,
+        "haversine_mean_km": 2.86,
+        "haversine_median_km": 0.32,
+        "haversine_p90_km": 6.95,
+        "haversine_mean_nm": 1.55
+      },
+      "48h": {
+        "lat_mae_deg": 0.0288,
+        "lon_mae_deg": 0.0845,
+        "rmse_deg": 0.7016,
+        "haversine_mean_km": 5.16,
+        "haversine_median_km": 0.95,
+        "haversine_p90_km": 12.78,
+        "haversine_mean_nm": 2.78
+      }
+    },
+    "gru_neural_network": {
+      "24h": {
+        "lat_mae_deg": 0.0131,
+        "lon_mae_deg": 0.0369,
+        "rmse_deg": 0.3158,
+        "haversine_mean_km": 2.31,
+        "haversine_median_km": 0.2,
+        "haversine_p90_km": 5.67,
+        "haversine_mean_nm": 1.25
+      },
+      "48h": {
+        "lat_mae_deg": 0.0215,
+        "lon_mae_deg": 0.0617,
+        "rmse_deg": 0.4397,
+        "haversine_mean_km": 3.86,
+        "haversine_median_km": 0.46,
+        "haversine_p90_km": 9.92,
+        "haversine_mean_nm": 2.08
+      }
+    }
+  },
+  "improvement_pct": {
+    "24h_haversine_km": 19.23,
+    "48h_haversine_km": 25.19
+  }
+}
