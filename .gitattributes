@@ -1,0 +1,12 @@
+# Keep generated outputs and research datasets out of GitHub language statistics.
+# These files are project artefacts/data, not authored application source.
+**/artifacts/** linguist-generated=true
+**/verification_results/** linguist-generated=true
+**/data/** linguist-generated=true
+**/stats_database_v7.1*/** linguist-generated=true
+
+# Exclude vendored dependencies and minified bundles from language statistics.
+**/node_modules/** linguist-vendored=true
+**/vendor/** linguist-vendored=true
+**/*.min.js linguist-vendored=true
+**/*.min.css linguist-vendored=true
